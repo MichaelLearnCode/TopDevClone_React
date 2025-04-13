@@ -13,7 +13,7 @@ export default function AdvertisingSection() {
         variableWidth:true
     };
     return (
-        <div className="pb-[32px] pt-[48px]">
+        <div className="pb-[32px] pt-[48px] overflow-hidden">
             <div className="container px-4 mb-[32px]">
                 <h1 className="heading-1 gradient-text">Nhà tuyển dụng hàng đầu</h1>
             </div>

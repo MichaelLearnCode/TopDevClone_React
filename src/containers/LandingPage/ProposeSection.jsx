@@ -10,7 +10,7 @@ export default function ProposeSection() {
     const api = Api({}).init();
     const [jobs, setJobs] = useState([]);
     async function fetchJobs() {
-        const response = await api.get('jobs',{limit: 10});
+        const response = await api.get('jobs',{limit: 5});
         setJobs(response);
     }
     useEffect(() => {
