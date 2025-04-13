@@ -1,8 +1,34 @@
 import { Dropdown } from "@/components/Dropdown";
-import {Button} from "@/components/Button";
+import { Button } from "@/components/Button";
+import { Api } from "@/assets/api/api";
+import { useEffect, useState } from 'react';
+
 export default function HeroSection() {
+
+    const api = Api({}).init();
+    const [locations, setLocations] = useState([]);
+    const [currentLocation, setCurrentLocation] = useState(null);
+    async function fetchLocations() {
+        const response = await api.get('locations');
+        setLocations(response);
+    }
+    useEffect(() => {
+        fetchLocations();
+    }, []);
+    console.log(locations);
+    const locationList = locations.map(location => {
+        return {
+            label: location.name,
+            value: location.slug
+        }
+    })
+    locationList.unshift({
+        label: "Tất cả",
+        value: "all"
+    })
+
     return (
-        <section className="hero-section my-10 py-14">
+        <section className="hero-section mt-[32px] py-[64px]">
             <div className="container px-4">
                 <div className="grid grid-cols-24 justify-center">
                     <div className="col-span-20 col-start-3 md:col-span-12 md:col-start-7 xl:col-span-10 xl:col-start-8">
@@ -36,16 +62,21 @@ export default function HeroSection() {
                                     </div>
                                     <div className="mt-2 md:mt-0 gap-2 flex items-center">
                                         <Dropdown
-                                            listClass = "rounded-[12px] py-[13px] px-[30px]"
-                                            leftIcon = {<img
+                                            options = {locationList}
+                                            initialLabel = "Vị trí"
+                                            listClass = "!rounded-[12px]"
+                                            toggleClass="py-[13px] px-[30px]"
+                                            itemClass = "py-[6px] px-[30px]"
+                                            onChange = {setCurrentLocation}
+                                            value = {currentLocation}
+                                            leftIcon={<img
                                                 width={21}
                                                 height={21}
                                                 src="/assets/image/spotlight-section/icon/img_icon_location.png"
-                                                alt=""/>}
-                                        >
-                                            Vị trí
-                                        </Dropdown>
-                                        <Button className="btn button-label flex-1 py-[13px] " variant = "contained" color = "dark">
+                                                alt="" />}
+                                        />
+
+                                        <Button className="btn !rounded-[12px] button-label flex-1 py-[13px] md:px-[20px] lg:px-[40px] xl:px-[50px] 2xl:px-[60px] " variant="contained" color="dark">
                                             Tìm kiếm
                                         </Button>
                                         {/*  */}
@@ -56,10 +87,10 @@ export default function HeroSection() {
                     </form>
                 </div>
                 <div className="flex gap-2 justify-center items-center">
-                    <Button className="small-headline py-2 px-4 !text-black" variant = "outlined" color = "primary">
+                    <Button className="small-headline py-2 px-4 !text-black" variant="outlined" color="primary">
                         New Job
                     </Button>
-                    <Button className="small-headline py-2 px-4 !text-black" variant = "outlined" color = "primary">
+                    <Button className="small-headline py-2 px-4 !text-black" variant="outlined" color="primary">
                         Part Time
                     </Button>
                 </div>

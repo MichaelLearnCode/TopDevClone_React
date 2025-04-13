@@ -1,10 +1,17 @@
-import {HeaderSection, HeroSection} from "@/containers/LandingPage"
+import { HotJobSection, TabSection, BlogSection,
+  HeaderSection, HeroSection, ProposeSection, AdvertisingSection} from "@/containers/LandingPage"
 
 export default function LandingPage() {
   return (
     <div>
-        <HeaderSection/>
-        <HeroSection/>
+      <img src="assets/image/hero-section/img_background.png" className ="absolute full-100 mt-[80px] blur-[100px] z-[-1]"/>
+      <HeaderSection />
+      <HeroSection />
+      <ProposeSection/>
+      <AdvertisingSection/>
+      <HotJobSection/>
+      <TabSection/>
+      <BlogSection/>
     </div>
   )
 }

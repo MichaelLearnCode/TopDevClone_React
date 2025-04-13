@@ -1,0 +1,73 @@
+import { Carousel, Nav } from '@/components/Carousel';
+import { JobCard } from '@/components/Card';
+import {Api} from "@/assets/api/api";
+import { useEffect, useState } from 'react';
+export default function HotJobSection() {
+    const api = Api({}).init();
+    const [jobs, setJobs] = useState([]);
+    async function fetchJobs(){
+        const response = await api.get('jobs');
+        setJobs(response);
+    }
+    useEffect(()=>{
+        fetchJobs();
+    },[])
+
+    const renderedJobs = jobs.map(job=>{
+        return <JobCard
+            className = "bg-white"
+            key = {job.id}
+            title = {job.title}
+            thumbnail = {job.thumbnail}
+            description = {job.description}
+            salary = {job.salary}
+            type = {job.type}
+            locationType = {job.locationType}
+        />
+    })
+
+    const hotJobSettings = {
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        nextArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%] right-[5%] translate-y-[-50%] w-[48px] h-[48px]'><span className='text-2xl text-white'>&gt;</span></Nav>,
+        prevArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%]  left-[5%] translate-y-[-50%] w-[48px] h-[48px]'><span className='text-2xl text-white'>&lt;</span></Nav>,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
+    return (
+        <section className="border-t-1 border-b-1 border-primary bg-[linear-gradient(90deg,rgba(235,39,2,0.1)_3.5%,rgba(255,125,37,0.1)_75%,rgba(255,157,90,0.1)_100%)]">
+            <div className="py-4">
+                <h1 className="pt-[32px] pb-4 w-full text-center gradient-text heading-1">
+                    Công Việc Hot Hôm Nay
+                </h1>
+                <Carousel
+                    className="pt-4 mb-[48px]"
+                    settings={hotJobSettings}>
+                    {renderedJobs}
+                </Carousel>
+            </div>
+        </section>
+    )
+}

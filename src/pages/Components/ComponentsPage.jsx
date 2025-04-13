@@ -149,10 +149,18 @@ export default function ComponentsPage() {
         <BlogCard className='w-2/4' />
       </div>
       <div className="container mt-[30px]">
-        <Carousel item={<JobCard />} settings={hotJobSettings} />
+        <Carousel settings={hotJobSettings}>
+        <JobCard />
+        <JobCard />
+        <JobCard />
+        </Carousel>
       </div>
       <div className="container mt-[30px]">
-        <Carousel ref={blogCarouselRef} settings={blogsSettings} item={<BlogCard />} />
+        <Carousel ref={blogCarouselRef} settings={blogsSettings}>
+        <BlogCard />
+        <BlogCard />
+        <BlogCard />
+        </Carousel>
       </div>
       <div className="container mt-[30px]">
         <Dropdown data = {dropdownItems} listClass = "shadow-sm" itemClass = "bg-transparent ps-[20px]" leftIcon = {<FaLocationDot/>} size = "xl" className = "w-[163px]">Dropdown</Dropdown>

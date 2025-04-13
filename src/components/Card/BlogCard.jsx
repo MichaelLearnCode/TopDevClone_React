@@ -15,13 +15,13 @@ export default function BlogCard(props) {
     });
     return (
         <div className={`mt-4 relative rounded-[16px] overflow-hidden shadow-[0_12px_60px_0_rgba(156,161,186,0.16)] ${className}`}>
-            <div className="card-img-wrapper">
+            <div className="card-img-wrapper relative">
                 <img
                     src={imgUrl}
                     alt=""
-                    className="card-img card-img-top aspect-[3/2]"
+                    className="aspect-[3/2] w-full object-cover"
                 />
-                <div className="card-img-overlay" />
+                <div className="bg-black/0 hover:bg-black/20 transition-all absolute w-full h-full top-0 left-0" />
                 <div className="rounded-[20px] text-white small-headline absolute top-[5%] right-[5%] bg-white/25 py-2 px-4">{field}</div>
             </div>
             <div className="p-4">

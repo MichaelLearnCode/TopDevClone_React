@@ -2,7 +2,7 @@
 
 
 @layout base {
-    --color-linear-gradient: linear-gradient(90deg, #eb2702 3.5%, #ff7d25 75%, #ff9d5a 100%);
+ 
 }
 
 
@@ -10,6 +10,7 @@
 /* start theme */
 @theme {
     /* colorscolors */
+    --color-primary-gradient: linear-gradient(90deg, #eb2702 3.5%, #ff7d25 75%, #ff9d5a 100%);
     --breakpoint-sm: 36rem;
     --breakpoint-md: 48rem;
     --breakpoint-lg: 62rem;
@@ -55,7 +56,6 @@
 /* start utility */
 @utility container {
     margin-inline: auto;
-    padding-inline: 2rem;
 
     @variant sm {
         max-width: '576px',
@@ -239,13 +239,13 @@
 @utility text-limit-2 {
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
 @utility gradient-text {
-    background-image: var(--color-linear-gradient);
+    background-image: var(--color-primary-gradient);
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }

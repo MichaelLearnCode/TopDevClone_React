@@ -1,18 +1,26 @@
-import {Dropdown} from "../../components/Dropdown";
+import { Dropdown } from "../../components/Dropdown";
+import { useState } from "react";
 export default function HeaderSection() {
-
+  
 
   const languageList = [
     {
-      id:1,
-      value: 'English'
+      label: 'English',
+      value: 'en',
+      display: <img
+        className="dropdown-toggle"
+        src="/assets/image/header/img_united_kingdom.png"
+        alt=""
+      />
     },
     {
-      id:2,
-      value: 'Vietnamese'
+      label: 'Vietnamese',
+      value: "vi"
     }
   ]
-  
+
+  const [language, setLanguage] = useState(languageList[0]);
+
   return (
     <nav className="navbar p-0">
       <div className="bg-dark w-full">
@@ -91,16 +99,14 @@ export default function HeaderSection() {
               Liên Hệ
             </a>
             <Dropdown
-              listClass = "bg-transparent hover:bg-transparent"
-              className ="bg-transparent"
-              data = {languageList}
-              rightIcon = ''
+              listClass="bg-transparent hover:bg-transparent !px-0"
+              className="bg-transparent"
+              options={languageList}
+              rightIcon=''
+              value={language}
+              onChange={setLanguage}
             >
-            <img
-                className="dropdown-toggle"
-                src="/assets/image/header/img_united_kingdom.png"
-                alt=""
-              />
+
             </Dropdown>
           </div>
         </div>

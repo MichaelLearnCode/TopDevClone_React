@@ -21,7 +21,7 @@ export default function Button(props) {
     },
     contained: {
       primary: 'text-white hover:bg-primary/90 bg-primary',
-      base: 'text-white hover:bg-neutral-gray-7/90 bg-neutral-gray-7',
+      base: 'text-black hover:bg-neutral-gray-2 bg-neutral-gray-1',
       success: 'text-white hover:bg-success-1/90 bg-success-1',
       dark: 'text-white hover:bg-dark/90 bg-dark'
     },

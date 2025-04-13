@@ -5,22 +5,22 @@ export default function Carousel(props) {
     const {
         ref = null,
         className = '',
-        item,
+        children,
         settings,
         margin = 10
 
     } = props;
     const renderedItems = [];
-    for (let i = 0; i < 8; i++) {
+    children.forEach(item => {
         renderedItems.push(
-        <div>
-            <div style={{ marginLeft: margin + 'px', marginRight: margin + 'px' }}>
-                {item}
-            </div>
-        </div>);
-    }
+            <div>
+                <div style={{ marginLeft: margin + 'px', marginRight: margin + 'px' }}>
+                    {item}
+                </div>
+            </div>);
+    })
     return (
-        <Slider ref = {ref} className={`relative ${className}`} {...settings}>
+        <Slider ref={ref} className={`relative ${className}`} {...settings}>
             {renderedItems}
         </Slider>
     );
