@@ -17,7 +17,7 @@ export default function Modal(props) {
 
     } = props;
     const modalRef = useRef();
-    const initialClass = "rounded-md overflow-hidden bg-white flex flex-col justify-between shadow-sm min-w-[30rem] min-h-[20rem]"
+    const initialClass = "rounded-md overflow-hidden bg-white flex flex-col justify-between shadow-sm w-full max-w-[500px]"
     const initialHeaderClass = "flex items-center";
     const initialBodyClass = "flex-1"
     const initialFooterClass = ""
@@ -27,9 +27,9 @@ export default function Modal(props) {
             if (!modalRef.current)return;
             if(!modalRef.current.contains(e.target))onClose();
         }
-        document.addEventListener('click', Handler, true);
+        document.addEventListener('mousedown', Handler, true);
         return ()=>{document.body.classList.remove('overflow-hidden');
-            document.removeEventListener('click', Handler)
+            document.removeEventListener('mousedown', Handler)
         }
     })
     return reactDOM.createPortal (
