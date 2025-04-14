@@ -1,18 +1,27 @@
 import { Carousel, Nav } from '@/components/Carousel';
-import { JobCard } from '@/components/Card';
+import { JobCard, SkeletonJobCard } from '@/components/Card';
 import {Api} from "@/assets/api/api";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 export default function HotJobSection() {
     const api = Api({}).init();
     const [jobs, setJobs] = useState([]);
+    const [isLoadingJobs, setIsLoadingJobs] = useState(false);
     async function fetchJobs(){
+        setIsLoadingJobs(true);
         const response = await api.get('jobs');
+        setIsLoadingJobs(false);
         setJobs(response);
     }
     useEffect(()=>{
         fetchJobs();
     },[])
-
+    const renderedSkeletonJobs = useMemo(()=>{
+        const array = [];
+        for(let i = 0;i<6;i++){
+            array.push(<SkeletonJobCard/>)
+        }
+        return array
+    },[])  
     const renderedJobs = jobs.map(job=>{
         return <JobCard
             className = "bg-white"
@@ -65,7 +74,7 @@ export default function HotJobSection() {
                 <Carousel
                     className="pt-4 mb-[48px]"
                     settings={hotJobSettings}>
-                    {renderedJobs}
+                    {isLoadingJobs? renderedSkeletonJobs:renderedJobs }
                 </Carousel>
             </div>
         </section>

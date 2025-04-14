@@ -1,20 +1,30 @@
 
-import { JobCard } from '@/components/Card';
+import { JobCard, SkeletonJobCard } from '@/components/Card';
 import { Carousel } from '@/components/Carousel';
 import { Button } from '@/components/Button';
-import {Api} from "@/assets/api/api";
-import { useEffect, useState } from 'react';
+import { Api } from "@/assets/api/api";
+import { useEffect, useState, useMemo } from 'react';
 
 export default function ProposeSection() {
 
     const api = Api({}).init();
     const [jobs, setJobs] = useState([]);
+    const [isLoadingJobs, setIsLoadingJobs] = useState(false);
     async function fetchJobs() {
-        const response = await api.get('jobs',{limit: 5});
+        setIsLoadingJobs(true);
+        const response = await api.get('jobs', { limit: 5 });
+        setIsLoadingJobs(false);
         setJobs(response);
     }
     useEffect(() => {
         fetchJobs();
+    }, []);
+    const renderedSkeletonJobs = useMemo(() => {
+        const array = [];
+        for (let i = 0; i < 3; i++) {
+            array.push(<SkeletonJobCard />)
+        }
+        return array
     }, [])
 
     const renderedJobs = jobs.map(job => {
@@ -33,6 +43,7 @@ export default function ProposeSection() {
     const advertiseSettings = {
         dots: false,
         infinite: true,
+        arrows: false,
         speed: 500,
         slidesToShow: 1,
         centerMode: true,
@@ -45,6 +56,7 @@ export default function ProposeSection() {
     const proposeSettings = {
         dots: true,
         infinite: false,
+        arrows: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -208,7 +220,7 @@ export default function ProposeSection() {
                         <div className="container px-4 md:px-0">
                             <h2 className="heading-2 mb-4">Đề xuất cho bạn</h2>
                             <Carousel settings={proposeSettings}>
-                                {renderedJobs}
+                                {isLoadingJobs? renderedSkeletonJobs : renderedJobs}
                             </Carousel>
                         </div>
                     </div>

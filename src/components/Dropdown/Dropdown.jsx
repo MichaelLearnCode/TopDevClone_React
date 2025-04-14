@@ -17,14 +17,14 @@ export default function Dropdown(props) {
     }, []);
 
     const handleOptionClick = (option)=>{
-        
+        if (option.onClick)option.onClick();
         setIsShow(false);
         if (onChange)onChange(option);
     }
 
     const {
         initialLabel = "Select...",
-        value,
+        value = '',
         className = "",
         leftIcon,
         toggleClass = "",
@@ -34,15 +34,22 @@ export default function Dropdown(props) {
         options = [],
         listClass = "",
         itemClass = "",
-        onChange
+        onChange,
+        fixedDisplay = false,
+        display 
     } = props;
 
     const initialClass = "rounded-sm cursor-pointer flex items-center gap-[6px] justify-between"
-    const itemInitialClass = "cursor-pointer min-w-[12rem]"
+    const itemInitialClass = "cursor-pointer min-w-[10rem]"
 
     const variantClass = {
         base: "bg-neutral-gray-1 text-black hover:bg-neutral-gray-2",
-        dark: "bg-dark hover:bg-dark/90 text-white"
+        dark: "bg-dark hover:bg-white/80 hover:text-black text-white"
+    }
+
+    const toggleVariantClass = {
+        base: "bg-neutral-gray-1 text-black",
+        dark: "bg-dark text-white"
     }
     const sizeClass = {
         sm: "px-[6px] py-[2px]",
@@ -59,9 +66,9 @@ export default function Dropdown(props) {
 
     return (
         <div ref={dropdownE} className={`${className} relative`}>
-            <div onClick={() => setIsShow(!isShow)} className={`${sizeClass[size]} ${initialClass} ${variantClass[variant]} ${toggleClass}`}>
+            <div onClick={() => setIsShow(!isShow)} className={`${sizeClass[size]} ${initialClass} ${toggleVariantClass[variant]} ${toggleClass}`}>
                 {leftIcon && <div>{leftIcon}</div>}
-                {value? (value.display??value.label):initialLabel}
+                {fixedDisplay? display : value? (value.display??value.label):initialLabel}
                 {rightIcon && <div>{rightIcon}</div>}
             </div>
             {isShow &&

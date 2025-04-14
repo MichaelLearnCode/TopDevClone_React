@@ -2,28 +2,38 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Tab } from "@/components/Tab";
 import { Button } from "@/components/Button";
 import { Api } from "@/assets/api/api";
-import { JobCard } from "@/components/Card";
-import UrlHandler from "../../common/url/UrlHandler";
+import { JobCard, SkeletonJobCard } from "@/components/Card";
+
 
 function TabContentTemplate(props) {
     const [jobs, setJobs] = useState([]);
+    const [isLoadingJobs, setIsLoadingJobs] = useState(false);
     const api = Api({}).init();
     const { currentItem, className = '' } = props;
 
     async function fetchJobs() {
+        setIsLoadingJobs(true);
         const response = await api.get('jobs', {
             custom: (job) => {
                 return currentItem.slug === 'all' ? 1 : job.location.slug === currentItem.slug;
             },
         });
+        setIsLoadingJobs(false);
         setJobs(response);
     }
+    const renderedSkeletonJobs = useMemo(() => {
+        const array = [];
+        for (let i = 0; i < 10; i++) {
+            array.push(<SkeletonJobCard />)
+        }
+        return array
+    }, [])
 
     useEffect(() => {
         fetchJobs();
     }, [currentItem]);
 
-    const renderedJob = useMemo(() => {
+    const renderedJobs = useMemo(() => {
         return jobs.map((job) => {
             return (
                 <JobCard
@@ -41,7 +51,7 @@ function TabContentTemplate(props) {
 
     return (
         <div className={`grid gap-[15px] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 ${className}`}>
-            {renderedJob}
+            {isLoadingJobs? renderedSkeletonJobs:renderedJobs}
         </div>
     );
 }

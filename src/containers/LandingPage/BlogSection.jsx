@@ -1,12 +1,20 @@
 import { Carousel, Nav } from "@/components/Carousel";
-import React, { useState, useRef, useEffect } from "react";
-import {BlogCard} from "@/components/Card";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import {BlogCard, SkeletonBlogCard} from "@/components/Card";
 import {Api} from "@/assets/api/api";
 export default function BlogSection() {
     const api = Api({}).init();
     const blogCarouselRef = useRef(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [blogs, setBlogs] = useState([]);
+    const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
+    const renderedSkeletonBlogs = useMemo(() => {
+            const array = [];
+            for (let i = 0; i < 6; i++) {
+                array.push(<SkeletonBlogCard />)
+            }
+            return array
+        }, [])
     const renderedBlogs = blogs.map(blog=>{
         return <BlogCard
             key = {blog.id}
@@ -18,13 +26,15 @@ export default function BlogSection() {
         />
     })
     async function fetchBlogs(){
+        setIsLoadingBlogs(true);
         const response = await api.get('blogs');
         setBlogs(response);
+        setIsLoadingBlogs(false);
     }
     useEffect(()=>{
         fetchBlogs();
     },[])
-    function handleBlogSliderChange(current) {
+    function handleBlogSliderChange(_,current) {
         const slickInstance = blogCarouselRef.current.innerSlider; // Lấy instance của Slick Carousel
         const slidesToScroll = slickInstance.props.slidesToScroll || 1; // Lấy slidesToScroll từ instance
         const dotIndex = Math.floor(current / slidesToScroll); // Tính toán dot index
@@ -72,8 +82,9 @@ export default function BlogSection() {
         speed: 500,
         dots: true,
         slidesToShow: 3,
+        arrows:false,
         slidesToScroll: 3,
-        afterChange: handleBlogSliderChange,
+        beforeChange: handleBlogSliderChange,
         appendDots: customDotsWrapper,
         responsive: [
             {
@@ -98,7 +109,7 @@ export default function BlogSection() {
             <div className="container px-4">
                 <h1 className="heading-1 mb-4">Blog</h1>
                 <Carousel ref={blogCarouselRef} settings={blogsSettings}>
-                    {renderedBlogs}
+                    {isLoadingBlogs? renderedSkeletonBlogs: renderedBlogs}
                 </Carousel>
             </div>
         </section>

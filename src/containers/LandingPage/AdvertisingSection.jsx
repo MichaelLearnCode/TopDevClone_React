@@ -6,6 +6,7 @@ export default function AdvertisingSection() {
         infinite: true,
         speed: 500,
         slidesToShow: 1,
+        arrows: false,
         centerMode: true,
         slidesToScroll: 1,
         autoplay: true,
@@ -13,7 +14,7 @@ export default function AdvertisingSection() {
         variableWidth:true
     };
     return (
-        <div className="pb-[32px] pt-[48px] overflow-hidden">
+        <div className="pb-[32px] pt-[48px]">
             <div className="container px-4 mb-[32px]">
                 <h1 className="heading-1 gradient-text">Nhà tuyển dụng hàng đầu</h1>
             </div>

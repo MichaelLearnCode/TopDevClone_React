@@ -64,9 +64,9 @@ export default function HeroSection() {
                                         <Dropdown
                                             options = {locationList}
                                             initialLabel = "Vị trí"
-                                            listClass = "!rounded-[12px]"
-                                            toggleClass="py-[13px] px-[30px]"
-                                            itemClass = "py-[6px] px-[30px]"
+                                            listClass = "!rounded-[12px] z-[1] shadow-sm"
+                                            toggleClass="!rounded-[12px] py-[13px] px-[30px]"
+                                            itemClass = "py-[6px] px-[30px] bg-white"
                                             onChange = {setCurrentLocation}
                                             value = {currentLocation}
                                             leftIcon={<img

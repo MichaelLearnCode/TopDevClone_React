@@ -4,8 +4,9 @@ import ProposeSection from "./ProposeSection";
 import AdvertisingSection from "./AdvertisingSection";
 import HotJobSection from "./HotJobSection";
 import TabSection from "./TabSection";
+import AboutSection from "./AboutSection";
 import BlogSection from "./BlogSection";
 export {
     HeaderSection, HeroSection, ProposeSection, AdvertisingSection,
-    HotJobSection, TabSection, BlogSection
+    HotJobSection, TabSection, BlogSection, AboutSection
 }

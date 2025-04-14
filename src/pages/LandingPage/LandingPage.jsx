@@ -1,4 +1,4 @@
-import { HotJobSection, TabSection, BlogSection,
+import { HotJobSection, TabSection, BlogSection, AboutSection,
   HeaderSection, HeroSection, ProposeSection, AdvertisingSection} from "@/containers/LandingPage"
 
 export default function LandingPage() {
@@ -12,6 +12,7 @@ export default function LandingPage() {
       <HotJobSection/>
       <TabSection/>
       <BlogSection/>
+      <AboutSection/>
     </div>
   )
 }
