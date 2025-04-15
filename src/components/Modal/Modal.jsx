@@ -37,7 +37,7 @@ export default function Modal(props) {
             <div ref = {modalRef} className={`${initialClass} ${className}`}>
                 <div className={`${headerClass} ${initialHeaderClass}`}>
                     {title}
-                    <AiOutlineClose onClick = {onClose} className='ms-auto'/>
+                    <AiOutlineClose onClick = {onClose} className='ms-auto cursor-pointer hover:text-neutral-gray-7'/>
                 </div>
                 <div className={`${initialBodyClass} ${bodyClass}`}>
                     {body}

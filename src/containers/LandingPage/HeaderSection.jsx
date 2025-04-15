@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { useForm } from "react-hook-form";
 import {z} from 'zod';
+import {Toast} from "@/components/Toast";
 import { Api } from "@/assets/api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 export default function HeaderSection() {
 
-  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowLoginModal, setIsShowLoginModal] = useState(false);
+  const [isShowToast, setIsShowToast] = useState(false);
+  const [isShowLogoutModal, setIsShowLogoutModal] = useState(false);
   const [user, setUser] = useState(null);
+  
   const api = Api({}).init();
 
   useEffect(() => {
@@ -53,7 +57,8 @@ export default function HeaderSection() {
     }
     localStorage.setItem('access_token', users[0].access_token);
     setUser(users[0]);
-    setIsShowModal(false);
+    setIsShowLoginModal(false);
+    setIsShowToast(true);
   }
 
   function handleLogout(){
@@ -74,7 +79,9 @@ export default function HeaderSection() {
     {
       label: 'Đăng xuất',
       value: 'logout',
-      onClick: handleLogout
+      onClick: ()=>{
+        setIsShowLogoutModal(true);
+      }
     }
   ]
   
@@ -98,8 +105,26 @@ export default function HeaderSection() {
 
   return (
     <nav className="sticky p-0">
-      {!user && isShowModal && <Modal
-        onClose={() => { setIsShowModal(false) }}
+      {isShowLogoutModal && <Modal
+        onClose={() => { setIsShowLogoutModal(false) }}
+        title={<h2 className="text-black heading-2">Đăng xuất</h2>}
+        headerClass='px-5 py-2 border-b-[1px] border-[#ccc]'
+        body={
+          <div className="flex flex-col px-5 py-[40px]">
+            <span className="body-1">Bạn có chắc chắn muốn đăng xuất?</span>
+          </div>
+        }
+        footer = {
+          <div className="flex justify-end border-t-[1px] border-[#ccc] py-2 px-5">
+            <Button variant="text" size="lg" className="body-1 py-[8px] ms-3" onClick={()=>{setIsShowLogoutModal(false); handleLogout()}}>Đăng xuất</Button>
+            <Button variant="contained" size="lg" className="button-label px-[30px] py-[8px]" color="primary" onClick={() => { setIsShowLogoutModal(false) }}>Hủy</Button>
+          </div>
+        }
+      />}
+      {isShowToast && <Toast
+        message="Đăng nhập thành công" type="success" onClose={() => setIsShowToast(false)} />}
+      {!user && isShowLoginModal && <Modal
+        onClose={() => { setIsShowLoginModal(false) }}
         headerClass='px-5 py-2 border-b-[1px] border-[#ccc]'
         title={<h2 className="gradient-text heading-2">Đăng nhập</h2>}
         body={
@@ -252,7 +277,7 @@ export default function HeaderSection() {
                   <span className="button-label text-black md:text-white">UI UX</span>
                 </div>
                 }
-              /> : <button onClick={() => { setIsShowModal(true) }} className="text-primary body-1 bg-transparent border-0 cursor-pointer js-login-modal-trigger">
+              /> : <button onClick={() => { setIsShowLoginModal(true) }} className="text-primary body-1 bg-transparent border-0 cursor-pointer js-login-modal-trigger">
                 Đăng nhập
               </button>}
 

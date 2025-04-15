@@ -1,5 +1,6 @@
 import { Carousel, Nav } from "@/components/Carousel";
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import {BlogCard, SkeletonBlogCard} from "@/components/Card";
 import {Api} from "@/assets/api/api";
 export default function BlogSection() {
@@ -45,13 +46,13 @@ export default function BlogSection() {
     const blogLeftNav = <Nav
         onClick={() => blogCarouselRef.current.slickPrev()}
         customClass="rounded-full bg-transparent ring-primary/70 cursor-pointer hover:ring-primary ring-2 flex items-center justify-center w-[26px] h-[26px]">
-        <span className="text-primary/70 hover:text-primary">&lt;</span>
+        <FaAngleLeft className="text-primary/70 hover:text-primary"/>
     </Nav>
 
     const blogRightNav = <Nav
         onClick={() => blogCarouselRef.current.slickNext()}
         customClass="rounded-full bg-transparent ring-primary/70 cursor-pointer hover:ring-primary ring-2 flex items-center justify-center w-[26px] h-[26px]">
-        <span className="text-primary/70 hover:text-primary">&gt;</span>
+        <FaAngleRight className="text-primary/70 hover:text-primary"/>
     </Nav>
     const customDotsWrapper = (dots) => {
         return (

@@ -1,5 +1,6 @@
 import { Carousel, Nav } from '@/components/Carousel';
 import { JobCard, SkeletonJobCard } from '@/components/Card';
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import {Api} from "@/assets/api/api";
 import { useEffect, useState, useMemo } from 'react';
 export default function HotJobSection() {
@@ -39,8 +40,8 @@ export default function HotJobSection() {
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
-        nextArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%] right-[5%] translate-y-[-50%] w-[48px] h-[48px]'><span className='text-2xl text-white'>&gt;</span></Nav>,
-        prevArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%]  left-[5%] translate-y-[-50%] w-[48px] h-[48px]'><span className='text-2xl text-white'>&lt;</span></Nav>,
+        prevArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%]  left-[5%] translate-y-[-50%] w-[48px] h-[48px]'><FaAngleLeft className = "text-white"/></Nav>,
+        nextArrow: <Nav customClass='z-1 cursor-pointer rounded-full d-block flex items-center justify-center bg-neutral-gray-6/80 hover:bg-neutral-gray-6/100 absolute top-[50%] right-[5%] translate-y-[-50%] w-[48px] h-[48px]'><FaAngleRight className = "text-white"/></Nav>,
         responsive: [
             {
                 breakpoint: 1200,
