@@ -181,7 +181,7 @@ export default function ProposeSection() {
                                 </Carousel>
                                 <div className="container px-4">
                                     <div className="mt-4">
-                                        <div className="tab-content grid grid-cols-24 gap-x-4">
+                                        <div className="tab-content grid grid-cols-24 md:gap-x-4">
                                             <div className="col-span-24 md:col-span-16">
                                                 <div className="img-wrapper w-full">
                                                     <img

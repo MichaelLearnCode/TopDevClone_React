@@ -1,6 +1,7 @@
 import { Dropdown } from "@/components/Dropdown";
 import { Button } from "@/components/Button";
 import { Api } from "@/assets/api/api";
+import { useDebounce } from "../../common/hooks/useDebounce";
 import { useEffect, useState } from 'react';
 
 export default function HeroSection() {
@@ -8,6 +9,37 @@ export default function HeroSection() {
     const api = Api({}).init();
     const [locations, setLocations] = useState([]);
     const [currentLocation, setCurrentLocation] = useState(null);
+    const [searchInput, setSearchInput] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchResults, setSearchResults] = useState([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
+    const debounceSearchInput = useDebounce(searchInput);
+    console.log(currentLocation);
+
+    async function searchJobs(){
+        setIsSearching(true);
+        const response = await api.get('jobs', {
+            limit: 5,
+            custom: (job)=>{
+                const senatizedJobTitle = job.title.trim().toLowerCase();
+                const senatizedInput = debounceSearchInput.trim().toLowerCase();
+                return senatizedJobTitle.includes(senatizedInput) && (!currentLocation || currentLocation.value === "all" || job.location.slug === currentLocation?.value);
+            }
+        })
+        setIsSearching(false);
+        setSearchResults(response);
+    }
+    useEffect(()=>{
+        if (searchInput){
+            searchJobs();
+        }
+        else{
+            setSearchResults([])
+        }
+    },[debounceSearchInput, currentLocation])
+    const renderedSearchResults = searchResults.map(job=>{
+        return <li key = {job.id} className = "cursor-pointer bg-white px-3 py-2 hover:bg-neutral-gray-1">{job.title}</li>
+    })
     async function fetchLocations() {
         const response = await api.get('locations');
         setLocations(response);
@@ -15,7 +47,6 @@ export default function HeroSection() {
     useEffect(() => {
         fetchLocations();
     }, []);
-    console.log(locations);
     const locationList = locations.map(location => {
         return {
             label: location.name,
@@ -46,11 +77,17 @@ export default function HeroSection() {
                                 <div className="gap-2 md:relative flex w-full flex-col md:flex-row md:items-center md:justify-center">
                                     <div className="relative md:static flex-1">
                                         <input
+                                            onFocus={()=>{setShowSearchResults(true)}}
+                                            onBlur={()=>{setShowSearchResults(false)}}
+                                            value = {searchInput}
+                                            onChange={(e)=>{setSearchInput(e.target.value)}}
                                             className="w-full p-[12px_4px_12px_79px] rounded-[12px] border-0 bg-neutral-gray-1 font-[400] text-[16px] leading-[1.4]"
                                             type="text"
                                             placeholder="Công việc bạn đang tìm ?"
                                         />
-                                        <ul className="search-suggestion w-full bg-white shadow"></ul>
+                                        {showSearchResults && <ul className="z-[3] w-full absolute top-[100%] rounded-sm overflow-hidden bg-white shadow">
+                                                {isSearching? 'Loading...': renderedSearchResults}
+                                            </ul>}
                                         <span className="absolute left-[39px] top-[50%] translate-y-[-50%]">
                                             <img
                                                 width={20}

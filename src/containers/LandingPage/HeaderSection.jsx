@@ -2,14 +2,13 @@ import { Dropdown } from "@/components/Dropdown";
 import { Modal } from "@/components/Modal";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
+import { useForm } from "react-hook-form";
+import {z} from 'zod';
 import { Api } from "@/assets/api/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 export default function HeaderSection() {
 
   const [isShowModal, setIsShowModal] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
   const api = Api({}).init();
 
@@ -23,19 +22,36 @@ export default function HeaderSection() {
       setUser(response[0]);
     }
   }
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoginLoading(true);
-    const users = await api.get('users', {custom: (user)=>{
-      return user.email === email && user.password === password
-    }})
-    setIsLoginLoading(false);
+  // validate
+
+  const schema = z.object({
+    email: z.string({
+      required_error: "Email là bắt buộc",
+      invalid_type_error: "Email phải là chuỗi"
+    }).email({message: "Email không đúng định dạng"}),
+    password: z.string({
+      required_error: "Mật khẩu là bắt buộc",
+      invalid_type_error: "Mật khẩu phải là chuỗi"
+    }).min(3,{message: "Mật khẩu phải có số ký tự tối thiểu là 3"})
+  })
+  
+  const {register, handleSubmit, setError, formState: {errors, isSubmitting}}
+  = useForm({
+    defaultValues: {
+      email: "t1@gmail.com",
+      password: 'pas'
+    },
+    resolver: zodResolver(schema)
+  })
+  const handleLoginSubmit = async (data) => {
+    const users = await api.get('users', {
+      custom: (user)=>user.email === data.email && user.password === data.password
+    })
     if (!users.length){
-      setErrorMessage('Tài khoản hoặc mật khẩu không đúng');
-      console.log(errorMessage);
-      return
+      setError("root", {message: "Email hoặc mật khẩu không đúng"});
+      return;
     }
-    localStorage.setItem('access_token', users[0].access_token)
+    localStorage.setItem('access_token', users[0].access_token);
     setUser(users[0]);
     setIsShowModal(false);
   }
@@ -87,16 +103,30 @@ export default function HeaderSection() {
         headerClass='px-5 py-2 border-b-[1px] border-[#ccc]'
         title={<h2 className="gradient-text heading-2">Đăng nhập</h2>}
         body={
-          <form onSubmit={handleLoginSubmit} className="flex flex-col justify-between">
+          <form onSubmit={handleSubmit(handleLoginSubmit)} className="flex flex-col justify-between" noValidate>
             <div className="flex flex-col px-5 pt-4">
-              {errorMessage && <span className = "text-red-600">{errorMessage}</span>}
+              {errors.root && <span className = "text-red-600">{errors.root.message}</span>}
               <label htmlFor="email">Nhập Email: </label>
-              <input onChange={(e) => { setEmail(e.target.value); setErrorMessage(null) }} value={email} className={`mt-2 mb-5 px-3 py-2 rounded-md bg-white w-full ${errorMessage? 'border-red-600':'border-[#ccc]'} ${errorMessage? 'focus:border-red-600 outline-[0]':'focus:border-black/60 outline-[0]'} border-[1px] body-1`} id="email" name="email" type="email" placeholder="Email của bạn" />
+              {errors.email && <span className = "text-red-600">{errors.email.message}</span>}
+              <input 
+                {...register('email')}
+                className={`mt-2 mb-5 px-3 py-2 rounded-md bg-white w-full 'border-[#ccc] border-[1px] body-1`} 
+                id="email" 
+                name="email" 
+                type="email" 
+                placeholder="Email của bạn" />
               <label htmlFor="password">Nhập mật khẩu: </label>
-              <input onChange={(e) => { setPassword(e.target.value); setErrorMessage(null)}} value={password} className={`mt-2 px-3 py-2 rounded-md bg-white w-full ${errorMessage? 'border-red-600':'border-[#ccc]'} ${errorMessage? 'focus:border-red-600 outline-[0]':'focus:border-black/60 outline-[0]'} border-[1px] body-1`} type="password" name="password" id="password" placeholder="Mật khẩu của bạn" />
+              {errors.password && <span className = "text-red-600">{errors.password.message}</span>}
+              <input 
+                {...register('password')}
+                className={`mt-2 px-3 py-2 rounded-md bg-white w-full border-[#ccc] border-[1px] body-1`} 
+                type="password" 
+                name="password" 
+                id="password" 
+                placeholder="Mật khẩu của bạn" />
             </div>
             <div className="flex justify-end border-t-[1px] border-[#ccc] mt-9 py-3 px-5">
-              <Button isLoading={isLoginLoading} variant="contained" size="lg" className="button-label py-[8px]" color="primary">Đăng nhập</Button>
+              <Button disabled = {isSubmitting} isLoading={isSubmitting} variant="contained" size="lg" className="button-label py-[8px]" color="primary">Đăng nhập</Button>
             </div>
           </form>
         }
@@ -211,7 +241,7 @@ export default function HeaderSection() {
                 alt=""
                 className="rounded-full"
               />}
-                toggleClass = "!rounded-[16px] py-[10px] px-[18px] gap-[10px] !bg-transparent md:!bg-dark"
+                toggleClass = "!rounded-[16px] py-[10px] !px-0 md:!px-[18px] gap-[10px] !bg-transparent md:!bg-dark"
                 fixedDisplay
                 options = {profileOptions}
                 variant = "dark"
